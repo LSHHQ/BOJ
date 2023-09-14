@@ -11,7 +11,7 @@ public class Main {
 
 		H = Integer.parseInt(st.nextToken());
 		W = Integer.parseInt(st.nextToken());
-		
+
 		lake = new char[H][W];
 		isWater = new boolean[H][W];
 		visited = new boolean[H][W];
@@ -37,39 +37,39 @@ public class Main {
 		swan_next.add(swan1);
 		visited[swan1.row][swan1.col] = true;
 
-		int days;
-		for (days = 0; !visited[swan2.row][swan2.col] ; ++days) {
+		int days = 0;
+		while(!visited[swan2.row][swan2.col]) {
 			
 			swan_now.addAll(swan_next);
-			melt_now.addAll(melt_next);
 			swan_next.clear();
+			melt_now.addAll(melt_next);
 			melt_next.clear();
 
 			while (!melt_now.isEmpty()) {
 
 				Point now = melt_now.poll();
 				lake[now.row][now.col] = '.';
-				
+
 				for (int i = 0; i < 4; ++i) {
 					Point next = now.add(delta[i]);
-					if (!next.ok() || isWater[next.row][next.col])
+					if (next.isOut() || isWater[next.row][next.col])
 						continue;
-					
+
 					isWater[next.row][next.col] = true;
-					melt_next.add(next); //현재 큐가 아닌 다음 녹을 큐에 넣어줌
+					melt_next.add(next); // 현재 큐가 아닌 다음 녹을 큐에 넣어줌
 				}
 			}
 
 			while (!swan_now.isEmpty()) {
-				
+
 				Point now = swan_now.poll();
-				
+
 				for (int i = 0; i < 4; ++i) {
 					Point next = now.add(delta[i]);
-					
-					if (!next.ok() || visited[next.row][next.col])
+
+					if (next.isOut() || visited[next.row][next.col])
 						continue;
-					
+
 					visited[next.row][next.col] = true;
 					if (lake[next.row][next.col] == '.')
 						swan_now.add(next);
@@ -77,6 +77,8 @@ public class Main {
 						swan_next.add(next);
 				}
 			}
+			
+			days++;
 		}
 
 		System.out.println(days - 1);
@@ -85,10 +87,10 @@ public class Main {
 	static int H, W;
 
 	static Point swan1, swan2;
-	static int[][] delta = { {-1,0}, {1,0}, {0,-1}, {0,1} };
-	static char[][] lake ;
-	static boolean[][] visited ;
-	static boolean[][] isWater ;
+	static int[][] delta = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+	static char[][] lake;
+	static boolean[][] visited;
+	static boolean[][] isWater;
 
 	static Queue<Point> swan_now = new LinkedList<>();
 	static Queue<Point> swan_next = new LinkedList<>();
@@ -106,10 +108,10 @@ public class Main {
 			col = c;
 		}
 
-		boolean ok() {
-			return row >= 0 && row < H && col >= 0 && col < W;
+		boolean isOut() {
+			return row < 0 || col < 0 || row >= H || col >= W;
 		}
-		
+
 		Point add(int[] other) {
 			return new Point(row + other[0], col + other[1]);
 		}
