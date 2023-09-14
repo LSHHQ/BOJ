@@ -38,46 +38,47 @@ public class Main {
 		visited[swan1.row][swan1.col] = true;
 
 		int days = 0;
+		boolean flag = true;
 		while(!visited[swan2.row][swan2.col]) {
 			
-			swan_now.addAll(swan_next);
-			swan_next.clear();
-			melt_now.addAll(melt_next);
-			melt_next.clear();
+			Queue<Point> meltA = flag ? melt_now : melt_next;
+			Queue<Point> meltB = !flag ? melt_now : melt_next;
+			Queue<Point> swanA = flag ? swan_now : swan_next;
+			Queue<Point> swanB = !flag ? swan_now : swan_next;
+			
+			while (!meltB.isEmpty()) {
 
-			while (!melt_now.isEmpty()) {
-
-				Point now = melt_now.poll();
+				Point now = meltB.poll();
 				lake[now.row][now.col] = '.';
 
 				for (int i = 0; i < 4; ++i) {
-					Point next = now.add(delta[i]);
+					Point next = now.sum(delta[i]);
+					
 					if (next.isOut() || isWater[next.row][next.col])
 						continue;
-
 					isWater[next.row][next.col] = true;
-					melt_next.add(next); // 현재 큐가 아닌 다음 녹을 큐에 넣어줌
+					meltA.add(next); // 현재 큐가 아닌 다음 녹을 큐에 넣어줌
 				}
 			}
 
-			while (!swan_now.isEmpty()) {
+			while (!swanB.isEmpty()) {
 
-				Point now = swan_now.poll();
+				Point now = swanB.poll();
 
 				for (int i = 0; i < 4; ++i) {
-					Point next = now.add(delta[i]);
+					Point next = now.sum(delta[i]);
 
 					if (next.isOut() || visited[next.row][next.col])
 						continue;
-
 					visited[next.row][next.col] = true;
 					if (lake[next.row][next.col] == '.')
-						swan_now.add(next);
+						swanB.add(next);
 					if (lake[next.row][next.col] == 'X')
-						swan_next.add(next);
+						swanA.add(next);
 				}
 			}
 			
+			flag = !flag;
 			days++;
 		}
 
@@ -100,9 +101,6 @@ public class Main {
 	static class Point {
 		int row, col;
 
-		Point() {
-		}
-
 		Point(int r, int c) {
 			row = r;
 			col = c;
@@ -112,8 +110,8 @@ public class Main {
 			return row < 0 || col < 0 || row >= H || col >= W;
 		}
 
-		Point add(int[] other) {
-			return new Point(row + other[0], col + other[1]);
+		Point sum(int[] delta) {
+			return new Point(row + delta[0], col + delta[1]);
 		}
 	}
 }
