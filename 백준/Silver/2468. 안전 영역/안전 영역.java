@@ -32,7 +32,7 @@ public class Main {
 					
 					if(map[i][j]>h && !visited[i][j]) {
 						visited[i][j] = true;
-						BFS(i, j, h);
+						DFS(i,j,h);
 						cnt++;
 					}
 				}
@@ -52,25 +52,18 @@ public class Main {
 	static int[] dr = { 1, -1, 0, 0 };
 	static int[] dc = { 0, 0, 1, -1 };
 
-	static void BFS(int r, int c, int h) {
-		Queue<int[]> que = new LinkedList<int[]>();
-		que.add(new int[] {r, c});
+	static void DFS(int row, int col, int h) {
 		
-		while (!que.isEmpty()) {
-			int row = que.peek()[0];
-			int col = que.poll()[1];
+		for (int dir = 0; dir < 4; dir++) {
+			int nrow = row+dr[dir];
+			int ncol = col+dc[dir];
 			
-			for (int dir = 0; dir < 4; dir++) {
-				int nrow = row+dr[dir];
-				int ncol = col+dc[dir];
-				
-				if(nrow>=N || ncol>=N || nrow<0 || ncol<0 
-						|| visited[nrow][ncol] || map[nrow][ncol]<=h)
-					continue;
-				
-				visited[nrow][ncol] = true;
-				que.add(new int[] {nrow,ncol});
-			}
+			if(nrow>=N || ncol>=N || nrow<0 || ncol<0 
+					|| visited[nrow][ncol] || map[nrow][ncol]<=h)
+				continue;
+			
+			visited[nrow][ncol] = true;
+			DFS(nrow,ncol,h);
 		}
 	}
 
