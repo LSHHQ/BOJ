@@ -33,21 +33,18 @@ public class Main {
 					if (visited[i][j])
 						continue;
 					
-					que = new LinkedList<>();
-					que.add(new int[] { i, j });
+					adj = new LinkedList<>();
+					adj.add(new int[] { i, j });
 					
-					cnt = 1;
-					sum = map[i][j];
-					visited[i][j] = true;
-					DFS(i, j);
+					BFS(i, j);
 					
 					if(cnt==1)
 						continue;
 					
 					flag = true;
-					while (!que.isEmpty()) {
-						int row = que.peek()[0];
-						int col = que.poll()[1];
+					while (!adj.isEmpty()) {
+						int row = adj.peek()[0];
+						int col = adj.poll()[1];
 						map[row][col] = sum / cnt;
 					}
 				}
@@ -60,31 +57,46 @@ public class Main {
 
 	}
 
-	static Queue<int[]> que;
+	static Queue<int[]> adj;
 	static int N, L, R, sum, cnt;
 	static int[][] map;
 	static boolean[][] visited;
 	static int[] dr = { 1, 0, -1, 0 };
 	static int[] dc = { 0, 1, 0, -1 };
 
-	static void DFS(int row, int col) {
-		for (int i = 0; i < 4; i++) {
-			int nrow = row + dr[i];
-			int ncol = col + dc[i];
 
-			if (nrow < 0 || ncol < 0 || nrow >= N || ncol >= N || visited[nrow][ncol])
-				continue;
-
-			int diff = Math.abs(map[nrow][ncol] - map[row][col]);
-
-			if (diff >= L && diff <= R) {
-				visited[nrow][ncol] = true;
-				sum += map[nrow][ncol];
-				cnt++;
-				que.add(new int[] { nrow, ncol });
-				DFS(nrow, ncol);
+	static void BFS(int r, int c) {
+		Queue<int[]> que = new LinkedList<>();
+		que.add(new int[] {r,c});
+		cnt = 1;
+		sum = map[r][c];
+		visited[r][c] = true;
+		
+		while(!que.isEmpty()) {
+			int row = que.peek()[0];
+			int col = que.poll()[1];
+			
+			for (int i = 0; i < 4; i++) {
+				int nrow = row + dr[i];
+				int ncol = col + dc[i];
+				
+				if (nrow < 0 || ncol < 0 || nrow >= N || ncol >= N || visited[nrow][ncol])
+					continue;
+				
+				int diff = Math.abs(map[nrow][ncol] - map[row][col]);
+				
+				if (diff >= L && diff <= R) {
+					visited[nrow][ncol] = true;
+					sum += map[nrow][ncol];
+					cnt++;
+					adj.add(new int[] { nrow, ncol });
+					que.add(new int[] { nrow, ncol });
+				}
 			}
+			
 		}
+		
+		
 	}
 
 }// class
