@@ -30,11 +30,8 @@ public class Main {
 		int point1 = Integer.parseInt(st.nextToken());
 		int point2 = Integer.parseInt(st.nextToken());
 
-		// 1. 1에서 시작했을 때 point1, 2 중 어디가 더 가까운지 계산
-		// 2. 가까운 포인트~ 먼포인트 거리 얼만지 계산
-
 		int[] tmp = deijkstra(1);
-		if (tmp[point2] == Integer.MAX_VALUE || tmp[point1] == Integer.MAX_VALUE || tmp[N] == Integer.MAX_VALUE) {
+		if (tmp[point2] == INF || tmp[point1] == INF || tmp[N] == INF) {
 			bw.write("-1");
 			bw.flush();
 			bw.close();
@@ -43,13 +40,14 @@ public class Main {
 
 		int routeA = 0;
 		int routeB = 0;
-
-		routeA += tmp[point1];
+		
 		routeA += deijkstra(point1)[point2];
-		routeA += deijkstra(point2)[N];
-
+		routeB += routeA;
+		
+		routeA += tmp[point1];
 		routeB += tmp[point2];
-		routeB += deijkstra(point2)[point1];
+
+		routeA += deijkstra(point2)[N];
 		routeB += deijkstra(point1)[N];
 
 		bw.write(String.valueOf(Math.min(routeA, routeB)));
@@ -58,13 +56,13 @@ public class Main {
 		bw.close();
 	}
 
-	static int N;
+	static int N, INF = Integer.MAX_VALUE;
 	static List<ArrayList<int[]>> list;
 
 	static int[] deijkstra(int start) {
 
 		int[] cost = new int[N + 1];
-		Arrays.fill(cost, (int) Integer.MAX_VALUE);
+		Arrays.fill(cost, (int) INF);
 
 		PriorityQueue<int[]> PQ = new PriorityQueue<>((a, b) -> {
 			return a[1] - b[1];
