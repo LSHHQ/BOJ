@@ -27,7 +27,7 @@ public class Main {
 			int B = Integer.parseInt(st.nextToken());
 
 			if (command == 0) {
-				union(A, B);
+				union(Math.min(A, B), Math.max(A, B));
 			} else if (command == 1) {
 				bw.write(check(A, B) ? "YES" : "NO");
 				bw.write("\n");
