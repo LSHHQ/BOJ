@@ -29,6 +29,7 @@ public class Main {
 		
 		
 		double total = 0;
+		int cnt = 0;
 		p = new int[V];
 		Arrays.fill(p, -1);
 		
@@ -40,6 +41,9 @@ public class Main {
 			
 			if(!isUnion(from,to)) {
 				total+=cost;
+				if(++cnt == V-1) {
+					break;
+				}
 			}
 		}
 		
