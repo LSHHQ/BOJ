@@ -61,8 +61,8 @@ public class Main {
 		Arrays.fill(expense, inf);
 		expense[start] = 0;
 
-		PriorityQueue<int[]> PQ = new PriorityQueue<>((a, b) -> {return a[1] - b[1];});
-//		Queue<int[]> PQ = new LinkedList<>();
+//		PriorityQueue<int[]> PQ = new PriorityQueue<>((a, b) -> {return a[1] - b[1];});
+		Queue<int[]> PQ = new LinkedList<>();
 		PQ.add(new int[] { start, 0 });
 
 		while (!PQ.isEmpty()) {
