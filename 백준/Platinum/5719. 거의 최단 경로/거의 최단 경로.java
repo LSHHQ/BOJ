@@ -32,9 +32,9 @@ public class Main {
 			route = new ArrayList[N];
 			Arrays.fill(route, new ArrayList<>());
 			
-			dijkstra(stt);
+			dijkstra1(stt);
 			removeEdge(stt, end);
-			dijkstra(stt);
+			dijkstra2(stt);
 			System.out.println(expense[end]==inf? -1 : expense[end]);
 		}
 	}
@@ -56,7 +56,7 @@ public class Main {
 		}
 	}
 
-	static void dijkstra(int start) {
+	static void dijkstra1(int start) {
 		expense = new int[N];
 		Arrays.fill(expense, inf);
 		expense[start] = 0;
@@ -80,6 +80,31 @@ public class Main {
 					PQ.add(new int[] { to, sum });
 				} else if (sum == expense[to]) {
 					route[to].add(from);
+				}
+			}
+		}
+	}
+	
+	static void dijkstra2(int start) {
+		expense = new int[N];
+		Arrays.fill(expense, inf);
+		expense[start] = 0;
+
+//		PriorityQueue<int[]> PQ = new PriorityQueue<>((a, b) -> {return a[1] - b[1];});
+		Queue<int[]> PQ = new LinkedList<>();
+		PQ.add(new int[] { start, 0 });
+
+		while (!PQ.isEmpty()) {
+			int from = PQ.peek()[0];
+			int cost = PQ.peek()[1];
+			PQ.poll();
+
+			for (int to = 0; to < N; to++) {
+				if (edge[from][to] == 0) continue;
+				int sum = edge[from][to] + cost;
+				if (sum < expense[to]) {
+					expense[to] = sum;
+					PQ.add(new int[] { to, sum });
 				}
 			}
 		}
