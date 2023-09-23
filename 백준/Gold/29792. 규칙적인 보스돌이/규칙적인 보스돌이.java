@@ -1,70 +1,76 @@
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringTokenizer st;
+	static long[][] boss;
+	static int max;
+	static int K;
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
+		Scanner sc = new Scanner(System.in);
 
-		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken()); // 총캐릭
-		M = Integer.parseInt(st.nextToken()); // 선택캐릭
-		K = Integer.parseInt(st.nextToken()); // 보스수
+		int N = sc.nextInt(); // 보유 캐릭터 갯수
+		int M = sc.nextInt(); // 하루에 사용할 캐릭터 갯수
+		K = sc.nextInt();
 
-		dps = new long[N];
-		HP = new long[K];
-		meso = new long[K];
+		long[] damageAll = new long[N]; // 캐릭터들의 초당 데미지 배열
+		long[] damageHigh = new long[M]; // 가장 센 M개 캐릭터를 강한 순으로 배열
 
-		for (int i = 0; i < N; i++)
-			dps[i] = Long.parseLong(br.readLine());
-
-		for (int i = 0; i < K; i++) {
-			st = new StringTokenizer(br.readLine());
-			HP[i] = Long.parseLong(st.nextToken());
-			meso[i] = Integer.parseInt(st.nextToken());
+		for (int i = 0; i < N; i++) {
+			damageAll[i] = sc.nextLong();
 		}
 
-		Arrays.sort(dps);
-
-		long ans = 0;
+		Arrays.sort(damageAll);
 
 		for (int i = 0; i < M; i++) {
-			maxMeso = 0;
-			solution(dps[N - 1 - i], 15 * 60, 0, 0);
-			ans += maxMeso;
+			damageHigh[i] = damageAll[N - 1 - i];
+		}
+
+		boss = new long[K][2]; // 0열은 체력, 1열을 메소
+		for (int i = 0; i < K; i++) {
+			boss[i][0] = sc.nextLong();
+			boss[i][1] = sc.nextLong();
+		}
+
+		// 캐릭터마다 검사
+		int ans = 0;
+		for (int i = 0; i < M; i++) {
+			max = 0; // 최대보상
+			dfs(max, damageHigh[i], 900, 0);
+			ans += max;
 		}
 
 		System.out.println(ans);
-
 	}
 
-	static int N, M, K; // 캐릭터 수, 하루 사용캐릭터 수, 보스의 수
-	static long[] dps; // 캐릭터 하나가 15분동안 가하는 데미지
-	static long[] HP; // 보스의 HP
-	static long[] meso; // 보스의 value
-	static long maxMeso;
-
-	// 보스를 잡아 얻을 수 있는 최대 메소를 출력
-	// 조합문제인데 보스를 몇마리 픽할지 정해지지 않았기 때문에 모든 경우를 탐색해야됌
-
-	static void solution(long dps, long leftSec, long gotMeso, int idx) {
-		if (gotMeso > maxMeso)
-			maxMeso = gotMeso;
+	// sum은 지금까지의 메소합, damage는 현재 캐릭터의 초당 데미지, leftTime은 남은 시간, idx는 몇 번째 보스를 잡고 있는지
+	public static void dfs(int sum, long damage, int leftTime, int idx) {
 		
-		if(idx==K || leftSec==0)
+		if (idx == K || leftTime <= 0) {
+			if (sum > max) {
+				max = sum;
+			}
 			return;
+		}
 
-		long a = HP[idx] % dps == 0 ? 0 : 1;
-		long usedSec = (HP[idx] / dps) + a;
-
-		solution(dps, leftSec, gotMeso, idx + 1);
-
-		if (leftSec < usedSec)
-			return;
 		
-		solution(dps, leftSec - usedSec, gotMeso + meso[idx], idx + 1);
-
-	}// solution()
-
+		
+		// 이 보스를 잡을 지 말지.. 못잡는다면, 잡는다는 선택을 하지 말 것!
+		// 잡는다..!
+		if(damage * (long)leftTime >= boss[idx][0]) {
+			int tmp = leftTime;
+			tmp -= boss[idx][0]/(long)damage;
+			if(boss[idx][0] % (long)damage > 0) {
+				tmp--;
+			}
+			
+			dfs(sum+(int)boss[idx][1], damage, tmp , idx+1);
+		}
+		
+		// 안잡는다..! 모든 값을 그대로 두고, 다음 보스로 넘어가기
+		dfs(sum, damage, leftTime, idx + 1);
+		
+		
+	}
 }
