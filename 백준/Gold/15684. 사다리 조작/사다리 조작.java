@@ -38,6 +38,7 @@ public class Main{
 	
 	static void func(int row, int col, int count) {
 		
+		if(count>=ans) return;
 		
 		if(accept()) {
 			ans = Math.min(count, ans);
