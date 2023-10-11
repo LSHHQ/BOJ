@@ -41,6 +41,7 @@ public class Main{
 		
 		if(accept()) {
 			ans = Math.min(count, ans);
+			return;
 		}
 		
 		if(count==3) return;
