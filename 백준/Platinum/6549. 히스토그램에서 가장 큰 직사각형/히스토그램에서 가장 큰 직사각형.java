@@ -40,13 +40,15 @@ public class Main {
 			init(1,1,N);
 		}
 		
-		int init(int node, int start, int end) {
-			if(start==end) return tree[node] = start;
-			int mid = (start+end)/2;
-			int L = init(node*2,start,mid);
-			int R = init(node*2+1,mid+1,end);
-			if(arr[L]<=arr[R]) return tree[node] = L;
-			else return tree[node] = R;
+		void init(int node, int start, int end) {
+			if(start==end) tree[node] = start;
+			else {
+				int mid = (start+end)/2;
+				init(node*2,start,mid);
+				init(node*2+1,mid+1,end);
+				if(arr[tree[node*2]]<=arr[tree[node*2+1]]) tree[node] = tree[node*2];
+				else tree[node] = tree[node*2+1];
+			}
 		}
 		
 		int getLocalMinIdx(int node, int start, int end, int left, int right) {
