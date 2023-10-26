@@ -39,7 +39,6 @@ public class Main {
 		
 		bw.write("1\n");
 		for (int i = 1; i < N; i++) {
-//			System.out.println(i+1+" | "+arr[i][0] +" "+ (arr[i][1]+1));
 			
 			if(arr[i][0]<=energy[i]) {
 				bw.write("1\n");
@@ -52,7 +51,8 @@ public class Main {
 				int next = arr[now][1];			
 				en -= arr[now][0] - arr[next][0];
 				if(en<0) {							
-					bw.write(now+1+"\n");		
+					bw.write(String.valueOf(now+1));
+					bw.write("\n");
 					break;
 				}
 				now = next;					
