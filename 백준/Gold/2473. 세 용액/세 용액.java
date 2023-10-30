@@ -35,20 +35,21 @@ public class Main {
 				int right = N-1;
 				int mid = 0;
 				long sum = 0;
+				
 				while(left<=right) {
+					
 					mid = (left+right)>>1;
 				
-//				System.out.println(i+" "+j+" "+mid);
-//				System.out.println(arr[i]+" "+arr[j]+" "+arr[mid]);
-//				System.out.println("----------------");
-				
+					//반복문의 종료가 인풋에따라 다르게 이루어져서
+					//종료시점이 최소일때 임을 보장하지 않는다.
+					//내 생각엔 종료시점 mid +-1 이 최소일것같다.
 					sum = (long)arr[i]+arr[j]+arr[mid];
-					
 					long tmp = Math.abs(sum);
 					if(tmp<min) {
 						min = tmp;
 						idx = new int[] {i,j,mid};
 					}
+				
 					
 					if(sum<0) left = mid+1;
 					else if(sum>0) right = mid-1;
@@ -57,6 +58,14 @@ public class Main {
 						break outter;
 					}
 				}
+				
+//				mid = (left+right)>>1;
+//				sum = (long)arr[i]+arr[j]+arr[mid];
+//				long tmp = Math.abs(sum);
+//				if(tmp<min) {
+//					min = tmp;
+//					idx = new int[] {i,j,mid};
+//				}
 			} 
 		}
 		
