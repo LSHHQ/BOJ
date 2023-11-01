@@ -31,7 +31,6 @@ public class Main {
 				if(flag) ans -= num;
 				else ans += num;
 			}else {
-				flag = false;
 				ans += num;
 			}
 		}
