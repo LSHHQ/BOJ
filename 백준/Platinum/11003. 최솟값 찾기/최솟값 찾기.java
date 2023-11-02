@@ -18,11 +18,13 @@ public class Main {
 		
 		st = new StringTokenizer(br.readLine()," ");
 		for (int i = 0; i < N; i++) {
-			int[] tmp = new int[] {stoi(st.nextToken()),i}; //밸류, 인덱스
+			int[] tmp = new int[] {stoi(st.nextToken()),i}; //밸류, 인덱스 
+			// 범위 밖인 밸류 버리기
 			while(!deq.isEmpty() && deq.peekFirst()[1] <= i-M) deq.pollFirst();
+			// 
 			while(!deq.isEmpty() && deq.peekLast()[0] > tmp[0]) deq.pollLast();
 			deq.addLast(tmp);
-			bw.write(deq.peekFirst()[0]+" ");
+			bw.write(String.valueOf(deq.peekFirst()[0])+" ");
 		}
 		
 		
