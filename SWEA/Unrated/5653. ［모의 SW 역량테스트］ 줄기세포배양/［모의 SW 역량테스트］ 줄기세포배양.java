@@ -95,7 +95,7 @@ public class Solution {
          
         @Override
         public int hashCode() {
-            int result = row*500 + col*17;
+            int result = row*713 + col;
             return result;
         }
          
