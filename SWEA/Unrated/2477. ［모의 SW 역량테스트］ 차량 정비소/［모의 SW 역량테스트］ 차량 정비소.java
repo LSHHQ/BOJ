@@ -50,12 +50,14 @@ public class Solution {
         		//도착한 애들 모두 대기큐에 넣기
         		while(!arive.isEmpty() && arive.peek().time==hour) recWait.add(arive.poll());
         		
+        		boolean flag1 = true;
+        		
         		//접수창구 집어넣기, 집어넣으면서 끝난애 정비창구 대기큐에 넣기
         		for (int i = 0; i < N; i++) {
         			Desk desk = reception.get(i);
         			//창구 안이 비어있거나 안에 있는 애 시간이 나갔을 시간이 됐을 때
-        			if(desk.client == null || desk.client.time<=hour) {
-//        				if(desk.client != null) System.out.println(desk.client.id);
+        			if(desk.client == null || desk.client.time==hour) {
+        				
         				//안에있는애 내보내면서 정비창구 대기큐에 넣기
         				if(desk.client != null) {
         					repWait.add(desk.client);
@@ -68,9 +70,11 @@ public class Solution {
        					client.rec = desk.id;
        					desk.client = client;
         			}
+        			if(desk.client!=null) flag1 = false;
 				}
         		
         		
+        		boolean flag2 = true;
         		for (int i = 0; i < M; i++) {
 					Desk desk = repair.get(i);
 
@@ -86,10 +90,12 @@ public class Solution {
        						client.id = 0;
        					}
 					}
+					if(desk.client!=null) flag2 = false;
 				}
         		
+        		if(flag1 && flag2 && arive.isEmpty() && recWait.isEmpty() && repWait.isEmpty()) break;
+        		
         		hour++;
-        		if(hour==1000000) break;
         	}
         	
             bw.write("#" + tc + " " + (ans == 0 ? -1 : ans) + "\n");
