@@ -26,6 +26,10 @@ void func(int depth, int pre) {
 
 int main() {
 
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
 	string str;
 	cin >> str;
 	 strLen = str.length();
